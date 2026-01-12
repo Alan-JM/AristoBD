@@ -8,4 +8,7 @@ public interface BitacoraService {
     Bitacora getByIdFolio(Integer idFolio);
     Bitacora save(Bitacora bitacora);
     void delete(Integer idFolio);
+
+
+
 }

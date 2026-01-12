@@ -3,12 +3,15 @@ package com.example.demo.controller;
 import com.example.demo.dto.BitacoraDto;
 import com.example.demo.model.Bitacora;
 import com.example.demo.model.Liquidacion;
+import com.example.demo.repository.BitacoraRepository;
 import com.example.demo.service.BitacoraService;
+import com.example.demo.service.impl.BitacoraServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequestMapping("/Aristo/api")
@@ -17,6 +20,8 @@ import java.util.stream.Collectors;
 public class BitacoraController {
 
     private final BitacoraService bitacoraService;
+    private final BitacoraServiceImpl bitacoraServiceImpl;
+    private final BitacoraRepository bitacoraRepository;
 
     @GetMapping("/bitacora")
     public ResponseEntity<List<BitacoraDto>> getAll() {
@@ -161,9 +166,91 @@ public class BitacoraController {
                 .build());
     }
 
+    @PutMapping("/bitacora/{idFolio}")
+    public ResponseEntity<BitacoraDto> update(@PathVariable Integer idFolio,
+                                              @RequestBody BitacoraDto bitacoraDto) {
+        Bitacora b = bitacoraService.getByIdFolio(idFolio);
+        if (b == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // 🔹 Actualiza solo los campos editables
+        b.setFecha(bitacoraDto.getFecha());
+        b.setOperador(bitacoraDto.getOperador());
+        b.setUnidadEco(bitacoraDto.getUnidadEco());
+        b.setCliente(bitacoraDto.getCliente());
+        b.setDestino(bitacoraDto.getDestino());
+        b.setAyudantes(bitacoraDto.getAyudantes());
+        b.setOdometroInicial(bitacoraDto.getOdometroInicial());
+        b.setOdometroFinal(bitacoraDto.getOdometroFinal());
+        b.setDistanciaTotal(bitacoraDto.getDistanciaTotal());
+        b.setCombustibleConsumido(bitacoraDto.getCombustibleConsumido());
+        b.setGastoTCombustible(bitacoraDto.getGastoTCombustible());
+        b.setGastoTCasetas(bitacoraDto.getGastoTCasetas());
+        b.setSubTotalT(bitacoraDto.getSubTotalT());
+        b.setGastoECombustible(bitacoraDto.getGastoECombustible());
+        b.setGastoECasetas(bitacoraDto.getGastoECasetas());
+        b.setGastoEComida(bitacoraDto.getGastoEComida());
+        b.setGastoEReparaciones(bitacoraDto.getGastoEReparaciones());
+        b.setGastoEManiobras(bitacoraDto.getGastoEManiobras());
+        b.setGastoETransito(bitacoraDto.getGastoETransito());
+        b.setGastoEOtros(bitacoraDto.getGastoEOtros());
+        b.setSubTotalE(bitacoraDto.getSubTotalE());
+        b.setGranTotal(bitacoraDto.getGranTotal());
+
+
+        Bitacora updated = bitacoraService.save(b);
+
+        return ResponseEntity.ok(BitacoraDto.builder()
+                .idFolio(updated.getIdFolio())
+                .fecha(updated.getFecha())
+                .operador(updated.getOperador())
+                .unidadEco(updated.getUnidadEco())
+                .cliente(updated.getCliente())
+                .destino(updated.getDestino())
+                .ayudantes(updated.getAyudantes())
+                .odometroInicial(updated.getOdometroInicial())
+                .odometroFinal(updated.getOdometroFinal())
+                .distanciaTotal(updated.getDistanciaTotal())
+                .combustibleConsumido(updated.getCombustibleConsumido())
+                .gastoTCombustible(updated.getGastoTCombustible())
+                .gastoTCasetas(updated.getGastoTCasetas())
+                .subTotalT(updated.getSubTotalT())
+                .gastoECombustible(updated.getGastoECombustible())
+                .gastoECasetas(updated.getGastoECasetas())
+                .gastoEComida(updated.getGastoEComida())
+                .gastoEReparaciones(updated.getGastoEReparaciones())
+                .gastoEManiobras(updated.getGastoEManiobras())
+                .gastoETransito(updated.getGastoETransito())
+                .gastoEOtros(updated.getGastoEOtros())
+                .subTotalE(updated.getSubTotalE())
+                .granTotal(updated.getGranTotal())
+                // devolvemos los campos no editables tal cual están
+                .telefonoAdmin(updated.getTelefonoAdmin())
+                .telefono(updated.getTelefono())
+                .confirmacion(updated.getConfirmacion())
+                .liquidacion(updated.getLiquidacion() != null ? updated.getLiquidacion().getIdFolio() : null)
+                .build());
+    }
     @DeleteMapping("/bitacora/{idFolio}")
     public ResponseEntity<Void> delete(@PathVariable Integer idFolio) {
         bitacoraService.delete(idFolio);
         return ResponseEntity.ok().build();
     }
+
+    @PatchMapping("/bitacoras/{id}/confirmacion")
+    public ResponseEntity<String> actualizarConfirmacion(
+            @PathVariable Integer id,
+            @RequestParam int confirmacion) {
+
+        Bitacora bitacora = bitacoraRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Bitácora no encontrada"));
+
+        // Actualizar solo confirmación
+        bitacora.setConfirmacion(confirmacion);
+        bitacoraRepository.save(bitacora);
+
+        return ResponseEntity.ok("Confirmación actualizada a " + confirmacion);
+    }
+
 }

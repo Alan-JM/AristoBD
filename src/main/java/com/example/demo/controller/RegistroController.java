@@ -29,6 +29,7 @@ public class RegistroController {
                         .telefono(r.getTelefono())
                         .nombre(r.getNombre())
                         .correo(r.getCorreo())
+                        .enviado(r.getEnviado())
                         .build())
                 .collect(Collectors.toList());
 
@@ -45,6 +46,7 @@ public class RegistroController {
                 .telefono(r.getTelefono())
                 .nombre(r.getNombre())
                 .correo(r.getCorreo())
+                .enviado(r.getEnviado())
                 .build());
     }
 
@@ -54,12 +56,16 @@ public class RegistroController {
                 .telefono(registroDto.getTelefono())
                 .nombre(registroDto.getNombre())
                 .correo(registroDto.getCorreo())
+                .enviado(registroDto.getEnviado())
                 .build();
+
         Registro saved = registroService.save(r);
+
         return ResponseEntity.ok(RegistroDto.builder()
                 .telefono(saved.getTelefono())
                 .nombre(saved.getNombre())
                 .correo(saved.getCorreo())
+                .enviado(saved.getEnviado())
                 .build());
     }
 

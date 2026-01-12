@@ -10,4 +10,5 @@ public class OperadorDto {
     private Integer uso;
     private String adminturno;
     private String telefonoAdmin;
+    private String telefonoP;
 }

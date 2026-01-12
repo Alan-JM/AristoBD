@@ -31,6 +31,7 @@ public class OperadorController {
                         .uso(o.getUso())
                         .adminturno(o.getAdministradorTurno() != null ? o.getAdministradorTurno().getClave() : null)
                         .telefonoAdmin(o.getTelefonoAdmin())
+                        .telefonoP(o.getTelefonoP()) // 🔹 nuevo campo
                         .build())
                 .collect(Collectors.toList());
 
@@ -48,6 +49,7 @@ public class OperadorController {
                 .uso(o.getUso())
                 .adminturno(o.getAdministradorTurno() != null ? o.getAdministradorTurno().getClave() : null)
                 .telefonoAdmin(o.getTelefonoAdmin())
+                .telefonoP(o.getTelefonoP()) // 🔹 nuevo campo
                 .build());
     }
 
@@ -58,13 +60,17 @@ public class OperadorController {
                 .uso(operadorDto.getUso())
                 .administradorTurno(operadorDto.getAdminturno() != null ? Administrador.builder().clave(operadorDto.getAdminturno()).build() : null)
                 .telefonoAdmin(operadorDto.getTelefonoAdmin())
+                .telefonoP(operadorDto.getTelefonoP()) // 🔹 nuevo campo
                 .build();
+
         Operador saved = operadorService.save(o);
+
         return ResponseEntity.ok(OperadorDto.builder()
                 .clave(saved.getClave())
                 .uso(saved.getUso())
                 .adminturno(saved.getAdministradorTurno() != null ? saved.getAdministradorTurno().getClave() : null)
                 .telefonoAdmin(saved.getTelefonoAdmin())
+                .telefonoP(saved.getTelefonoP()) // 🔹 nuevo campo
                 .build());
     }
 

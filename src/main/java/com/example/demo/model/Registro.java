@@ -1,23 +1,24 @@
 package com.example.demo.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.*;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
 @Entity
-@Table(name = "registros")
+@Table(name = "Registros")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Registro {
 
     @Id
-    @Column(name = "telefono", length = 10)
-    private String telefono;   // PRIMARY KEY
+    private String telefono;
 
-    @Column(name = "nombre", nullable = false, length = 50)
     private String nombre;
 
-    @Column(name = "correo", nullable = false, length = 50)
     private String correo;
+
+    private int enviado;
 }

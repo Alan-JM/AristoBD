@@ -25,4 +25,7 @@ public class Operador {
 
     @Column(name = "telefonoAdmin", length = 20)
     private String telefonoAdmin;
+
+    @Column(name = "telefonop", length = 10)
+    private String telefonoP;
 }
